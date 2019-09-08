@@ -1,0 +1,5 @@
+# Ignore all Class File 
+*.class 
+*.bat
+*.pyc
+.idea/
