@@ -12,7 +12,7 @@ class District(models.Model):
     DivisionId = models.IntegerField(db_column='DivisionID', null=False)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'district'
 
     def __str__(self):
@@ -32,7 +32,7 @@ class RegisteredUser(models.Model):
     DistrictId = models.ForeignKey(District, db_column='DistrictId', on_delete=models.CASCADE)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'RegisteredUser'
 
     def __str__(self):

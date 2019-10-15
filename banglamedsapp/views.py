@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from datetime import datetime
 from .models import *
 from rest_framework.reverse import reverse
-from .serializer import RegisteredStgSerializer
+from .serializer import RegisteredStgSerializer, DistrictSerializer
 from rest_framework.renderers import JSONRenderer
 from django.core.files.storage import FileSystemStorage
 import json
@@ -34,12 +34,19 @@ from django.db import DatabaseError, transaction
 import http.client, urllib.request, urllib.parse, urllib.error, base64
 
 from requests_oauthlib import OAuth1Session
+from django.http import JsonResponse
 
 
 
 class AllProduct(viewsets.ModelViewSet):
+    #queryset = District.objects.all()
+    # queryset = RegisteredUser.objects.all()
+
+    # role_class = RegisteredStgSerializer
+    # queryset = RegisteredUser.objects.all()
     queryset = District.objects.all()
-    role_class = RegisteredStgSerializer
+    serializer_class = DistrictSerializer
+    role_class = DistrictSerializer
 
     # Endpoint to receive image from mobile app
 
@@ -61,10 +68,15 @@ class AllProduct(viewsets.ModelViewSet):
         msg = "1"
 
         return Response(r.json(), content_type="application/json")
-
+#viewsets.ModelViewSet
 class AllDistrict(viewsets.ModelViewSet):
     queryset = District.objects.all()
-    role_class = RegisteredStgSerializer
+    #queryset = RegisteredUser.objects.all()
+    serializer_class = DistrictSerializer
+    role_class = DistrictSerializer
+
+    def get_serializer_class(self):
+        return self.role_class
 
     def list(self, request):
         # queryset = District.objects.all().values('Id', 'DistrictName').using('YamahaBooking')
@@ -76,13 +88,19 @@ class AllDistrict(viewsets.ModelViewSet):
                                 resource_owner_secret='d4b2655c7355faa644dd9dcf20948b57')
         url = 'http://staging.banglameds.com.bd/api/rest/districts'
         r = twitter.get(url)
-        #print("=====" + str(r.json()))
+        print("=====" + str(r.json()))
         msg = "1"
-        return Response(r.json(), content_type="application/json")
+        return JsonResponse(str(r.json()), safe=False)
+        #return Response(r.json(), content_type="application/json")
 
 class Areas(viewsets.ModelViewSet):
+    #queryset = District.objects.all()
+    # queryset = RegisteredUser.objects.all()
+    # role_class = RegisteredStgSerializer
+
     queryset = District.objects.all()
-    role_class = RegisteredStgSerializer
+    serializer_class = DistrictSerializer
+    role_class = DistrictSerializer
 
     def list(self, request):
         aCode = request.GET.get('AreaCode')
@@ -97,8 +115,11 @@ class Areas(viewsets.ModelViewSet):
         return Response(r.json(), content_type="application/json")
 
 class Orderstatus(viewsets.ModelViewSet):
+    #queryset = District.objects.all()
+    #role_class = RegisteredStgSerializer
     queryset = District.objects.all()
-    role_class = RegisteredStgSerializer
+    serializer_class = DistrictSerializer
+    role_class = DistrictSerializer
 
     def list(self, request):
         orderCode = request.GET.get('OrderCode')
