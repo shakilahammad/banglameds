@@ -57,12 +57,16 @@ class AllProduct(viewsets.ModelViewSet):
     def list(self, request):
         # queryset = District.objects.all().values('Id', 'DistrictName').using('YamahaBooking')
         # data = json.dumps(list(queryset))
+        name = request.GET.get('name')
+        page = request.GET.get('page')
+        print("name----"+str(name)+"page-->"+str(page))
 
         twitter = OAuth1Session('1cb615ef0b50b640324bb7e614551f7b',
                                 client_secret='edf2e5500bd06bdcf0a48182236917af',
                                 resource_owner_key='bfddd465b6ea96755e5b170c7dc5adec',
                                 resource_owner_secret='d4b2655c7355faa644dd9dcf20948b57')
-        url = 'http://staging.banglameds.com.bd/api/rest/productlist?name=napa&page='
+        url = 'http://staging.banglameds.com.bd/api/rest/productlist?name='+str(name)+'&page='+str(page)
+        print("name----" + str(url))
         r = twitter.get(url)
         #print("=====" + str(r.json()))
         msg = "1"
